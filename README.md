@@ -7,4 +7,4 @@ Run below command to create EC2 instance
 ```bash
 terraform init; terraform apply --auto-approve
 ```
-This will create instance with wordpress installed.
+This will create instance with wordpress installed and output for wordpress setup site.
