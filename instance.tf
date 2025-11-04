@@ -38,6 +38,10 @@ resource "aws_instance" "master" {
 	lifecycle {
 		replace_triggered_by = [ aws_key_pair.this ]
 	}
+
+	provisioner "local-exec" {
+		command = "until nc -z ${self.public_dns} 80; do sleep 1; done"
+	}
 }
 
 
