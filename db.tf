@@ -5,10 +5,12 @@ resource "aws_rds_cluster" "wordpress" {
   engine_version          = "8.0.mysql_aurora.3.10.1"
   availability_zones      = ["us-east-1a", "us-east-1b", "us-east-1c"]
   db_subnet_group_name = aws_db_subnet_group.wordpress.name
+  vpc_security_group_ids = [aws_security_group.db.id]
   database_name           = "wordpress_db"
   master_username         = "wordpress_user"
   master_password         = "your_strong_password"
-  backup_retention_period = 5
+  skip_final_snapshot = true
+  apply_immediately = true
   preferred_backup_window = "07:00-09:00"
 
   serverlessv2_scaling_configuration {

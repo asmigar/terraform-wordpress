@@ -40,6 +40,7 @@ cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
 sed -i 's/database_name_here/wordpress_db/g' /var/www/html/wp-config.php
 sed -i 's/username_here/wordpress_user/g' /var/www/html/wp-config.php
 sed -i 's/password_here/your_strong_password/g' /var/www/html/wp-config.php
+sed -i 's/localhost/${db_endpoint}/g' /var/www/html/wp-config.php
 
 # Set appropriate permissions
 chown -R apache:apache /var/www/html/

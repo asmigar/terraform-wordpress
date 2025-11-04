@@ -2,8 +2,8 @@ data "http" "my_public_ip" {
 	url = "https://ipv4.icanhazip.com"
 }
 
-resource "aws_security_group" "allow_ssh" {
-	name        = "allow_tls"
+resource "aws_security_group" "wordpress" {
+	name        = "wordpress"
 	description = "Allow TLS inbound traffic"
 	vpc_id      = aws_vpc.main.id
 
@@ -33,7 +33,27 @@ resource "aws_security_group" "allow_ssh" {
 	}
 
 	tags = {
-		Name = "allow_ssh"
+		Name = "Wordpress"
 	}
 }
+
+
+resource "aws_security_group" "db" {
+	name        = "db"
+	description = "Allow DB inbound traffic"
+	vpc_id      = aws_vpc.main.id
+
+	ingress {
+		description = "tcp"
+		from_port   = 3306
+		to_port     = 3306
+		protocol    = "tcp"
+		security_groups = [aws_security_group.wordpress.id]
+	}
+
+	tags = {
+		Name = "DB"
+	}
+}
+
 

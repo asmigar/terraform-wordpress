@@ -29,9 +29,9 @@ resource "aws_instance" "wordpress" {
 		Name = "wordpress"
 	}
 
-	user_data_base64 = filebase64("${path.module}/setup.sh")
+	user_data = templatefile("${path.module}/setup.sh.tftpl", {db_endpoint = aws_rds_cluster.wordpress.endpoint})
 
-	vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+	vpc_security_group_ids = [aws_security_group.wordpress.id]
 	subnet_id              = aws_subnet.public.id
 	key_name               = aws_key_pair.this.key_name
 
