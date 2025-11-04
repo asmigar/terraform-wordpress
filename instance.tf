@@ -21,7 +21,7 @@ data "aws_ami" "amazon_linux_2023" {
 
 
 
-resource "aws_instance" "master" {
+resource "aws_instance" "wordpress" {
 	ami           = data.aws_ami.amazon_linux_2023.id
 	instance_type = "t4g.small"
 
