@@ -49,3 +49,13 @@ resource "aws_route_table_association" "public_crt_public_subnet" {
   route_table_id = aws_route_table.public_custom_route_table.id
 }
 
+resource "aws_subnet" "db_subnets" {
+  count = 3
+  vpc_id = aws_vpc.main.id
+  cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index + 1)
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
+
+  tags = {
+    Name = "db_subnet"
+  }
+}
