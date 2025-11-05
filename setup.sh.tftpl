@@ -2,31 +2,11 @@
 
 #!/bin/bash
 
-
-cat << EOF > /etc/yum.repos.d/MariaDB.repo
-[mariadb]
-name = MariaDB
-baseurl = https://rpm.mariadb.org/10.6/centos9-aarch64/$releasever/$basearch
-gpgkey= https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1
-EOF
-
-yum install -y httpd MariaDB-server php php-mysqlnd php-fpm wget
+yum install -y httpd php php-mysqlnd php-fpm wget
 
 # Start and enable services
 systemctl start httpd
 systemctl enable httpd
-systemctl start mariadb
-systemctl enable mariadb
-
-# Secure MariaDB (optional, but recommended for production)
-# mysql_secure_installation (interactive, so not ideal for user data)
-
-# Create WordPress database and user
-mysql -u root -e "CREATE DATABASE wordpress_db;"
-mysql -u root -e "CREATE USER 'wordpress_user'@'localhost' IDENTIFIED BY 'your_strong_password';"
-mysql -u root -e "GRANT ALL PRIVILEGES ON wordpress_db.* TO 'wordpress_user'@'localhost';"
-mysql -u root -e "FLUSH PRIVILEGES;"
 
 # Download and install WordPress
 wget https://wordpress.org/latest.tar.gz -P /tmp/
