@@ -8,4 +8,8 @@ variable "ssh_key_name" {
   default     = "wordpress"
   description = "ssh key name to be created in EC2 and store in ~/.ssh folder"
 }
-
+variable "db_password" {
+  type = string
+  sensitive = true
+  description = "database password"
+}

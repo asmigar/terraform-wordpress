@@ -18,7 +18,7 @@ resource "aws_rds_cluster" "wordpress" {
   vpc_security_group_ids = [aws_security_group.db.id]
   database_name           = "wordpress_db"
   master_username         = "wordpress_user"
-  master_password         = "your_strong_password"
+  master_password         = var.db_password
   snapshot_identifier = data.aws_db_cluster_snapshot.wordpress_db_snapshot.id
   skip_final_snapshot = false
   final_snapshot_identifier = "aurora-cluster-wordpress-${random_string.snapshot_identifier_suffix.id}"
