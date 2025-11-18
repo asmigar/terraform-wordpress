@@ -8,3 +8,7 @@ Run below command to create EC2 instance
 terraform init; terraform apply --auto-approve
 ```
 This will create instance with wordpress installed and output for wordpress setup site.
+
+## TODO
+- [ ] Use random generated DB password
+- [ ] Don't store the private ssh key resource in state file
