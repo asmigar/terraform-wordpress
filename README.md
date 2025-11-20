@@ -10,5 +10,4 @@ terraform init; terraform apply --auto-approve
 This will create instance with wordpress installed and output for wordpress setup site.
 
 ## TODO
-- [ ] Use IAM auth to connect to RDS from EC2
 - [ ] Don't store the private ssh key resource in state file
