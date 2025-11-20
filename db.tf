@@ -1,11 +1,28 @@
 data "aws_db_cluster_snapshot" "wordpress_db_snapshot" {
-  db_cluster_identifier = "aurora-cluster-wordpress" # Replace with your snapshot ARN or identifier
-  most_recent          = true # Set to true to get the latest snapshot
+  db_cluster_identifier = "aurora-cluster-wordpress"
+  most_recent          = true
+  snapshot_type = "manual"
 }
 
 resource "random_string" "snapshot_identifier_suffix" {
   length           = 4
   special          = false
+}
+
+ephemeral "random_password" "db_password" {
+  length           = 16
+  override_special = "$!_^*#"
+}
+
+resource "aws_ssm_parameter" "db_password" {
+  name  = "db_master_password"
+  type  = "SecureString"
+  value_wo = ephemeral.random_password.db_password.result
+  value_wo_version = 3
+}
+
+ephemeral "aws_ssm_parameter" "db_password" {
+  arn = aws_ssm_parameter.db_password.arn
 }
 
 resource "aws_rds_cluster" "wordpress" {
@@ -18,7 +35,8 @@ resource "aws_rds_cluster" "wordpress" {
   vpc_security_group_ids = [aws_security_group.db.id]
   database_name           = "wordpress_db"
   master_username         = "wordpress_user"
-  master_password         = var.db_password
+  master_password_wo      = ephemeral.aws_ssm_parameter.db_password.value
+  master_password_wo_version = aws_ssm_parameter.db_password.value_wo_version
   snapshot_identifier = data.aws_db_cluster_snapshot.wordpress_db_snapshot.id
   skip_final_snapshot = false
   final_snapshot_identifier = "aurora-cluster-wordpress-${random_string.snapshot_identifier_suffix.id}"

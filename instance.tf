@@ -42,6 +42,16 @@ resource "aws_instance" "wordpress" {
 	provisioner "local-exec" {
 		command = "until nc -z ${self.public_dns} 80; do sleep 1; done"
 	}
+
+	provisioner "remote-exec" {
+		connection {
+			host = self.public_dns
+			user = "ec2-user"
+			private_key = file(local_sensitive_file.ssh_private_key.filename)
+		}
+
+		inline = [" sudo sed -i 's/password_here/${ephemeral.aws_ssm_parameter.db_password.value}/g' /var/www/html/wp-config.php"]
+	}
 }
 
 
